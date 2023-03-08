@@ -8,6 +8,7 @@ from Pokemon import getpokemon
 from bordel import endlebordel
 from unidecode import unidecode
 from JusteMouki import just_price
+from Blague import get_blague
 from time import sleep
 
 load_dotenv()
@@ -25,7 +26,7 @@ class Bot(commands.Bot):
         threading.Thread(target=self.do_thing).start()
 
     async def event_ready(self):
-        chan = self.get_channel("Pimouki")
+        chan = self.get_channel(os.getenv("CHANNEL"))
         loop = asyncio.get_event_loop()
         self.loop = loop
         self.chan = chan

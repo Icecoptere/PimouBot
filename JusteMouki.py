@@ -8,9 +8,9 @@ def just_price(cmd, message):
         global le_bon_chiffre
         if cmd == "pimoukigold":
             if message.author.name.lower() == "pimouki":
-                le_bon_chiffre = random.randint(1, 1000000000)
+                le_bon_chiffre = random.randint(1, 1000)
                 print(le_bon_chiffre)
-                return "Le meuga jeu de la mort est lancé mettez un chiffre entre 1 et 1000000000 et tenté de gagnez un " \
+                return "Le meuga jeu de la mort est lancé mettez un chiffre entre 1 et 1000 et tenté de gagnez un " \
                        "super Kdo "
         cmd = int(cmd)
         if cmd < le_bon_chiffre:

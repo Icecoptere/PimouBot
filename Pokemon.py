@@ -2,7 +2,6 @@ import requests
 import json
 import os
 from playsound import playsound
-from time import sleep
 
 
 def getpokemon(nompokemon):
@@ -10,7 +9,6 @@ def getpokemon(nompokemon):
     if nompokemon == "pokemon":
         return "zizi"
     if r.status_code == 200:
-        # Renomé J
         try:
             reponse = ""
             j = json.loads(r.text)
@@ -26,7 +24,7 @@ def getpokemon(nompokemon):
             nomjap = j['name']['jp']
             reponse += f' et se nomme {nomjap} en japonais'
             nomeng = j['name']['en']
-            #getpokemonscream(nomeng)
+            getpokemonscream(nomeng)
 
             return reponse
         except Exception as val:

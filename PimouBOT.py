@@ -1,7 +1,7 @@
-# bot.py
+import spotipy
 import threading
 import asyncio
-import os  # for importing env vars for the bot to use
+import os
 from twitchio.ext import commands
 from dotenv import load_dotenv
 from Pokemon import getpokemon
@@ -10,6 +10,7 @@ from unidecode import unidecode
 from JusteMouki import just_price
 from Blague import get_blague
 from time import sleep
+from spotipy.oauth2 import SpotifyClientCredentials
 
 load_dotenv()
 

@@ -7,7 +7,7 @@ from playsound import playsound
 def getpokemon(nompokemon):
     r = requests.get(f'https://mon-api-pokemon.vercel.app/api/v1/pokemon/{nompokemon}')
     if nompokemon == "pokemon":
-        return "zizi"
+        return "le petit zizi de ice"
     if r.status_code == 200:
         try:
             reponse = ""
@@ -24,7 +24,7 @@ def getpokemon(nompokemon):
             nomjap = j['name']['jp']
             reponse += f' et se nomme {nomjap} en japonais'
             nomeng = j['name']['en']
-            getpokemonscream(nomeng)
+            #getpokemonscream(nomeng)
 
             return reponse
         except Exception as val:

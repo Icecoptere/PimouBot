@@ -2,22 +2,22 @@ import os
 import asyncio
 import spotipy
 import threading
-from uuid             import UUID
-from time             import sleep
+from uuid import UUID
+from time import sleep
 from twitchAPI.helper import first
 from twitchAPI.pubsub import PubSub
 from twitchAPI.twitch import Twitch
-from twitchio.ext     import commands
-from unidecode        import unidecode
-from twitchAPI.types  import AuthScope
-from BlagueAPI        import blague_api
-from Pokemon          import getpokemon
-from JusteMouki       import just_price
-from dotenv           import load_dotenv
-from bordel           import endlebordel
-from Spotify          import add_track_to_playlist
-from twitchAPI.oauth  import UserAuthenticator
-from spotipy.oauth2   import SpotifyClientCredentials
+from twitchio.ext import commands
+from unidecode import unidecode
+from twitchAPI.types import AuthScope
+from BlagueAPI import blague_api
+from Pokemon import getpokemon
+from JusteMouki import just_price
+from dotenv import load_dotenv
+from bordel import endlebordel
+from Spotify import add_track_to_playlist
+from twitchAPI.oauth import UserAuthenticator
+from spotipy.oauth2 import SpotifyClientCredentials
 
 load_dotenv()
 
@@ -154,3 +154,4 @@ threading.Thread(target=pubsub).start()
 
 bot = Bot()
 bot.run()
+

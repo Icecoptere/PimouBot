@@ -1,0 +1,22 @@
+<aiml version="1.0">
+    <category>
+        <pattern>LOAD AIML B</pattern>
+        <template>
+            <!-- Load standard AIML set -->
+            <learn>standard/salutations.aiml</learn>
+            <learn>standard/atomique_ed.aiml</learn>
+            <learn>standard/comment_ed.aiml</learn>
+            <learn>standard/estu_ed.aiml</learn>
+            <learn>standard/humour_ed.aiml</learn>
+            <learn>standard/ou_ed.aiml</learn>
+            <learn>standard/pourquoi_ed.aiml</learn>
+            <learn>standard/quand_ed.aiml</learn>
+            <learn>standard/quel_ed.aiml</learn>
+            <learn>standard/questceque_ed.aiml</learn>
+            <learn>standard/qui_ed.aiml</learn>
+            <learn>standard/srai_ed.aiml</learn>
+            <learn>standard/std-pickup-fr.aiml</learn>
+            <learn>standard/that_ed.aiml</learn>
+        </template>
+    </category>
+</aiml>

@@ -2,32 +2,40 @@ import os
 import asyncio
 import spotipy
 import threading
-from uuid             import UUID
-from time             import sleep
+from uuid import UUID
+from time import sleep
 from twitchAPI.helper import first
 from twitchAPI.pubsub import PubSub
 from twitchAPI.twitch import Twitch
-from twitchio.ext     import commands
-from unidecode        import unidecode
-from twitchAPI.types  import AuthScope
-from BlagueAPI        import blague_api
-from Pokemon          import getpokemon
-from JusteMouki       import just_price
-from dotenv           import load_dotenv
-from bordel           import endlebordel
-from Spotify          import add_track_to_playlist
-from twitchAPI.oauth  import UserAuthenticator
-from spotipy.oauth2   import SpotifyClientCredentials
+from twitchio.ext import commands
+from unidecode import unidecode
+from twitchAPI.types import AuthScope
+from BlagueAPI import blague_api
+from Pokemon import getpokemon
+from JusteMouki import just_price
+from dotenv import load_dotenv
+from bordel import endlebordel
+from Spotify import add_track_to_playlist
+from twitchAPI.oauth import UserAuthenticator
+from spotipy.oauth2 import SpotifyClientCredentials
 
 load_dotenv()
 
 
 class Bot(commands.Bot):
     def __init__(self):
+
         super().__init__(token=os.getenv("TMI_TOKEN"), prefix='!', initial_channels=[os.getenv("CHANNEL")])
-        self.spotify = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id=os.getenv("SPOTIPY_CLIENT_ID"),
-                                                                             client_secret=os.getenv(
-                                                                                 "SPOTIPY_CLIENT_SECRET")))
+        self.auth_manager = SpotifyClientCredentials(client_id=os.getenv("SPOTIPY_CLIENT_ID"),
+                                                     client_secret=os.getenv("SPOTIPY_CLIENT_SECRET"))
+        self.spotify = spotipy.Spotify(auth_manager=self.auth_manager)
+
+        threading.Thread(target=self.refresh_spotify_token, daemon=True).start()
+
+    def refresh_spotify_token(self):
+        while True:
+            sleep(3600)  # Attendre une heure avant de rafraîchir le token
+            self.auth_manager.get_access_token()  # Rafraîchir le token Spotify
 
     def do_thing(self):
         list_message = blague_api()
@@ -143,7 +151,6 @@ def pubsub():
 
 
 threading.Thread(target=pubsub).start()
-
 
 bot = Bot()
 bot.run()

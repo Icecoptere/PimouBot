@@ -47,4 +47,4 @@ def get_blague():
         "Comment s'appelle la femelle du gnou ?   La rtule"
     ]
     message = liste_msg[randint(0, len(liste_msg) - 1)]
-    return message
+

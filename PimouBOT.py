@@ -2,22 +2,22 @@ import os
 import asyncio
 import spotipy
 import threading
-from uuid import UUID
-from time import sleep
-from Blague import get_blague
-from dotenv import load_dotenv
-from bordel import endlebordel
-from Pokemon import getpokemon
-from unidecode import unidecode
-from twitchio.ext import commands
-from JusteMouki import just_price
+from uuid             import UUID
+from time             import sleep
 from twitchAPI.helper import first
 from twitchAPI.pubsub import PubSub
 from twitchAPI.twitch import Twitch
-from twitchAPI.types import AuthScope
-from Spotify import add_track_to_playlist
-from twitchAPI.oauth import UserAuthenticator
-from spotipy.oauth2 import SpotifyClientCredentials
+from twitchio.ext     import commands
+from unidecode        import unidecode
+from twitchAPI.types  import AuthScope
+from BlagueAPI        import blague_api
+from Pokemon          import getpokemon
+from JusteMouki       import just_price
+from dotenv           import load_dotenv
+from bordel           import endlebordel
+from Spotify          import add_track_to_playlist
+from twitchAPI.oauth  import UserAuthenticator
+from spotipy.oauth2   import SpotifyClientCredentials
 
 load_dotenv()
 
@@ -30,8 +30,10 @@ class Bot(commands.Bot):
                                                                                  "SPOTIPY_CLIENT_SECRET")))
 
     def do_thing(self):
-        message = get_blague()
-        self.loop.create_task(self.chan.send(message))
+        list_message = blague_api()
+        self.loop.create_task(self.chan.send(list_message[0]))
+        sleep(3)
+        self.loop.create_task(self.chan.send(list_message[1]))
         sleep(600)
         threading.Thread(target=self.do_thing).start()
 
@@ -141,6 +143,7 @@ def pubsub():
 
 
 threading.Thread(target=pubsub).start()
+
 
 bot = Bot()
 bot.run()

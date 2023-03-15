@@ -2,6 +2,7 @@ import os
 import asyncio
 import spotipy
 import threading
+global nb_message
 from uuid import UUID
 from time import sleep
 from twitchAPI.helper import first
@@ -15,11 +16,13 @@ from Pokemon import getpokemon
 from JusteMouki import just_price
 from dotenv import load_dotenv
 from bordel import endlebordel
-from Spotify import add_track_to_playlist
+from PimouIA.chatbot import get_response
 from twitchAPI.oauth import UserAuthenticator
+from Spotify import add_track_to_playlist
 from spotipy.oauth2 import SpotifyClientCredentials
 
 load_dotenv()
+nb_message = 0
 
 
 class Bot(commands.Bot):
@@ -56,8 +59,13 @@ class Bot(commands.Bot):
         print(f"Bot connected to Twitch as {bot.nick}")
 
     async def event_message(self, message):
+        global nb_message
         if message.echo:
             return
+        nb_message = nb_message + 1
+        if nb_message % 100 == 0:
+            response_aiml = get_response(message.content)
+            await message.channel.send(response_aiml)
 
         print(message.content)
         if message.content[0] == "!":
@@ -105,8 +113,8 @@ TARGET_CHANNEL = 'Pimouki'
 
 
 async def callback_redeem(uuid: UUID, data: dict) -> None:
-    print('got callback for UUID ' + str(uuid))
-    print(data)
+    # print('got callback for UUID ' + str(uuid))
+    # print(data)
 
     redeem_ID = data["data"]["redemption"]["reward"]["id"]
     match redeem_ID:
@@ -116,7 +124,7 @@ async def callback_redeem(uuid: UUID, data: dict) -> None:
             track_name = user_input
             track_results = bot.spotify.search(q=track_name, limit=10, type='track')
             if track_results['tracks']['items']:
-                print(track_results['tracks']['items'][0]["album"]["name"])
+                # print(track_results['tracks']['items'][0]["album"]["name"])
                 track_uri = track_results['tracks']['items'][0]['uri']
                 await bot.chan.send(
                     f" SingsNote MrDestructoid BipBoup ajout de : {track_results['tracks']['items'][0]['name']} MrDestructoid SingsNote ")
@@ -154,4 +162,3 @@ threading.Thread(target=pubsub).start()
 
 bot = Bot()
 bot.run()
-

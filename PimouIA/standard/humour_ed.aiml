@@ -95,8 +95,8 @@
 <category><pattern>HEH</pattern><template><srai>smile</srai></template></category>
 <category><pattern>HEHE *</pattern><template><srai>smile <star/></srai></template></category>
 <category><pattern>HEHE</pattern><template><srai>smile</srai></template></category>
-<category><pattern>HEHEHE</pattern><template><srai>smile</srai></template></category>
-<category><pattern>HIHI *</pattern><template><srai>smile <star/></srai></template></category>
+<category><pattern>HEHEHE LUL</pattern><template><srai>smile</srai></template></category>
+<category><pattern>HIHI LUL *</pattern><template><srai>smile <star/></srai></template></category>
 <category><pattern>HIHI</pattern><template><srai>smile</srai></template></category>
 <category><pattern>HIHIHI</pattern><template><srai>smile</srai></template></category>
 <category><pattern>HO</pattern><template><srai>smile</srai></template></category>

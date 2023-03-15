@@ -15,8 +15,8 @@
             <learn>standard/questceque_ed.aiml</learn>
             <learn>standard/qui_ed.aiml</learn>
             <learn>standard/srai_ed.aiml</learn>
-            <learn>standard/std-pickup-fr.aiml</learn>
             <learn>standard/that_ed.aiml</learn>
+            <learn>standard/std-pickup-fr.aiml</learn>
         </template>
     </category>
 </aiml>

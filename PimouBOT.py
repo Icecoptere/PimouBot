@@ -45,7 +45,7 @@ class Bot(commands.Bot):
         self.loop.create_task(self.chan.send(list_message[0]))
         sleep(3)
         self.loop.create_task(self.chan.send(list_message[1]))
-        sleep(600)
+        sleep(6000)
         threading.Thread(target=self.do_thing).start()
 
     async def event_ready(self):
@@ -63,7 +63,7 @@ class Bot(commands.Bot):
         if message.echo:
             return
         nb_message = nb_message + 1
-        if nb_message % 100 == 0:
+        if nb_message % 15 == 0:
             response_aiml = get_response(message.content)
             await message.channel.send(response_aiml)
 

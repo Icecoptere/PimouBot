@@ -23,5 +23,4 @@ def blague_api():
     list_message = [blague, reponse]
     return list_message
 
-
-blague_api()
+#print(blague_api())

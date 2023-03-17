@@ -2,5 +2,5 @@
 /.env
 /.cache
 /.cache-Pimouki
-.idea
-/twitch/
+../PimouBot/.idea
+.dump

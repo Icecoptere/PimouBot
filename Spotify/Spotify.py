@@ -9,10 +9,11 @@ from dotenv import load_dotenv
 from spotipy import oauth2
 
 load_dotenv()
-
+os.chdir('./Spotify')
 # configure the Spotify API
-scope = 'playlist-modify-public'
-username = "Pimouki"
+scope = 'playlist-read-private user-modify-playback-state playlist-modify-private user-read-playback-state ' \
+        'user-read-currently-playing playlist-modify-public playlist-modify-private'
+username = os.getenv("CHANNEL")
 client_id = os.getenv("SPOTIPY_CLIENT_ID")
 client_secret = os.getenv("SPOTIPY_CLIENT_SECRET")
 redirect_uri = 'http://localhost:8888/callback'
@@ -37,10 +38,15 @@ if not token_info:
 sp = spotipy.Spotify(auth=token_info['access_token'])
 
 # define the playlist ID for the target playlist
-playlist_id = "4vbADzemxKl7b6kL8CClEd"
+playlist_id = os.getenv("SPOTIFY_PLAYLIST_ID")
+os.chdir('../../PimouBot')
 
 
 # define a function to add a track to the playlist
 def add_track_to_playlist(track_uri):
-    results = sp.user_playlist_add_tracks(username, playlist_id, [track_uri])
-    return results
+    try:
+        results = sp.playlist_add_items(playlist_id, [track_uri])
+        sp.add_to_queue(track_uri)
+        return True
+    except:
+        return False

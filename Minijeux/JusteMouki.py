@@ -1,5 +1,7 @@
+import os
 import random
-
+from dotenv import load_dotenv
+load_dotenv()
 global le_bon_chiffre
 
 
@@ -7,7 +9,7 @@ def just_price(cmd, message):
     try:
         global le_bon_chiffre
         if cmd == "pimoukigold":
-            if message.author.name.lower() == "pimouki":
+            if message.author.name.lower() == os.getenv("CHANNEL").lower():
                 le_bon_chiffre = random.randint(1, 1000)
                 print(le_bon_chiffre)
                 return "Le meuga jeu de la mort est lancé mettez un chiffre entre 1 et 1000 et tenté de gagnez un " \

@@ -45,7 +45,7 @@ def endlebordel(cmd, message, parsed_input):
                     return "Ce n'est pas possible de divisé par 0."
 
                 resultat = int(parsed_input[1]) / int(parsed_input[2])
-                return f'le résultats est {resultat}'
+                return f'le résultat est {resultat}'
             else:
                 return "Tu es un grand couillon tu n'as pas mis de chiffre"
     return None

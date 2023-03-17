@@ -8,6 +8,8 @@ def getpokemon(nompokemon):
     r = requests.get(f'https://mon-api-pokemon.vercel.app/api/v1/pokemon/{nompokemon}')
     if nompokemon == "pokemon":
         return "le petit zizi de ice"
+    elif nompokemon == "pimouki":
+        return "Pimouki il est trop fort j'ai pas pu le capturer dans mon Pokédex"
     if r.status_code == 200:
         try:
             reponse = ""

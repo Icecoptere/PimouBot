@@ -2,7 +2,7 @@ import os
 import asyncio
 import spotipy
 import threading
-global nb_message
+
 from uuid             import UUID
 from time             import sleep
 from twitchAPI.helper import first
@@ -11,14 +11,14 @@ from twitchAPI.twitch import Twitch
 from twitchio.ext     import commands
 from unidecode        import unidecode
 from twitchAPI.types  import AuthScope
-from BlagueAPI        import blague_api
-from Pokemon          import getpokemon
-from JusteMouki       import just_price
+from Blague.BlagueAPI import blague_api
+from Extension.Pokemon import getpokemon
+from Minijeux.JusteMouki import just_price
 from dotenv           import load_dotenv
-from bordel           import endlebordel
+from Extension.bordel import endlebordel
 from PimouIA.chatbot  import get_response
 from twitchAPI.oauth  import UserAuthenticator
-from Spotify          import add_track_to_playlist
+from Spotify.Spotify          import add_track_to_playlist
 from spotipy.oauth2   import SpotifyClientCredentials
 
 load_dotenv()
@@ -32,7 +32,7 @@ class Bot(commands.Bot):
         self.auth_manager = SpotifyClientCredentials(client_id=os.getenv("SPOTIPY_CLIENT_ID"),
                                                      client_secret=os.getenv("SPOTIPY_CLIENT_SECRET"))
         self.spotify = spotipy.Spotify(auth_manager=self.auth_manager)
-
+        self.loop = asyncio.get_event_loop()
         threading.Thread(target=self.refresh_spotify_token, daemon=True).start()
 
     def refresh_spotify_token(self):
@@ -41,36 +41,29 @@ class Bot(commands.Bot):
             self.auth_manager.get_access_token()  # Rafraîchir le token Spotify
 
     def do_thing(self):
-        list_message = blague_api()
-        self.loop.create_task(self.chan.send(list_message[0]))
-        sleep(3)
-        self.loop.create_task(self.chan.send(list_message[1]))
-        sleep(6000)
-        threading.Thread(target=self.do_thing).start()
+        while True:
+            list_message = blague_api()
+            self.loop.create_task(self.chan.send(list_message[0]))
+            sleep(3)
+            self.loop.create_task(self.chan.send(list_message[1]))
+            sleep(6000)
 
     async def event_ready(self):
-        chan = self.get_channel(os.getenv("CHANNEL"))
-        loop = asyncio.get_event_loop()
-        self.loop = loop
-        self.chan = chan
-        threading.Thread(target=self.do_thing).start()
+        self.loop = asyncio.get_event_loop()
+        self.chan = self.get_channel(os.getenv("CHANNEL"))
+        threading.Thread(target=self.do_thing, daemon=True).start()
         print(f'Logged in as | {self.nick}')
         print(f'User id is | {self.user_id}')
         print(f"Bot connected to Twitch as {bot.nick}")
 
     async def event_message(self, message):
         global nb_message
+        nb_message = nb_message + 1
         if message.echo:
             return
-        nb_message = nb_message + 1
-        if nb_message % 15 == 0:
-            response_aiml = get_response(message.content)
-            await message.channel.send(response_aiml)
-
-        print(message.content)
+        print(f"{message.author.name}:{message.content}")
         if message.content[0] == "!":
             parsed_input = unidecode(message.content.lstrip("!")).split(" ")
-            print(parsed_input)
             command = parsed_input[0].lower()
             match command:
                 case "pokemon":
@@ -79,7 +72,7 @@ class Bot(commands.Bot):
                     await message.channel.send(response)
                     return
                 case "karaoke":
-                    await message.channel.send("Voila le lien pour choisir le karaoke de ton choix "
+                    await message.channel.send("Voila le lien pour choisir le karaoké de ton choix "
                                                "youtube.com/@karafunfr")
                     return
                 case "bigard":
@@ -92,15 +85,15 @@ class Bot(commands.Bot):
                 await message.channel.send(response)
                 return
 
-        if True:
-            message.content[0] == ""
-            parsed_input = unidecode(message.content.lstrip("")).split(" ")
-            print(parsed_input)
-            command = parsed_input[0].lower()
-            response = just_price(command, message)
-            if response is not None:
-                await message.channel.send(response)
-                return
+        parsed_input = unidecode(message.content.lstrip("")).split(" ")
+        command = parsed_input[0].lower()
+        response = just_price(command, message)
+        if response is not None:
+            await message.channel.send(response)
+            return
+        if nb_message % 15 == 0:
+            response_aiml = get_response(message.content)
+            await message.channel.send(response_aiml)
 
     async def event_channel_points_custom_reward_add(payload):
         print(f"Custom reward added: {payload}")
@@ -109,26 +102,28 @@ class Bot(commands.Bot):
 CLIENT_ID = os.getenv("CLIENT_ID")
 TWITCH_SECRET = os.getenv("TWITCH_SECRET")
 USER_SCOPE = [AuthScope.CHANNEL_READ_REDEMPTIONS]
-TARGET_CHANNEL = 'Pimouki'
+TARGET_CHANNEL = os.getenv("CHANNEL")
 
 
 async def callback_redeem(uuid: UUID, data: dict) -> None:
-    # print('got callback for UUID ' + str(uuid))
     # print(data)
 
     redeem_ID = data["data"]["redemption"]["reward"]["id"]
     match redeem_ID:
 
-        case "6ccd6826-ebbf-4813-8076-0370c0115d88":
+        case "81751725-973f-46c6-b1a3-f70166de7bac":
             user_input = data["data"]["redemption"]["user_input"]
             track_name = user_input
             track_results = bot.spotify.search(q=track_name, limit=10, type='track')
             if track_results['tracks']['items']:
-                # print(track_results['tracks']['items'][0]["album"]["name"])
                 track_uri = track_results['tracks']['items'][0]['uri']
-                await bot.chan.send(
-                    f" SingsNote MrDestructoid BipBoup ajout de : {track_results['tracks']['items'][0]['name']} MrDestructoid SingsNote ")
-                add_track_to_playlist(track_uri)
+                success = add_track_to_playlist(track_uri)
+                if success:
+                    song = track_results['tracks']['items'][0]
+                    message = f"SingsNote MrDestructoid BipBoup ajout de : {song['name']} par {song['artists'][0]['name']} MrDestructoid SingsNote"
+                else:
+                    message = "Soit j'ai pas trouvé, soit y'a eu une erreur, déso MyAvatar"
+                await bot.chan.send(message)
             else:
                 pass
                 await bot.chan.send(f"Je n'ai pas trouvé {track_name} sur Spotify.")

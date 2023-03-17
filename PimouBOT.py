@@ -110,8 +110,10 @@ async def callback_redeem(uuid: UUID, data: dict) -> None:
 
     redeem_ID = data["data"]["redemption"]["reward"]["id"]
     match redeem_ID:
-
-        case "81751725-973f-46c6-b1a3-f70166de7bac":
+        # Pimou <3
+        case "6ccd6826-ebbf-4813-8076-0370c0115d88":
+        # Ice
+        # case "81751725-973f-46c6-b1a3-f70166de7bac":
             user_input = data["data"]["redemption"]["user_input"]
             track_name = user_input
             track_results = bot.spotify.search(q=track_name, limit=10, type='track')

@@ -4,7 +4,6 @@ import json
 import spotipy
 import spotipy.util as util
 from json.decoder import JSONDecodeError
-
 from dotenv import load_dotenv
 from spotipy import oauth2
 

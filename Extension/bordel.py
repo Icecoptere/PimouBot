@@ -3,7 +3,15 @@ from random import randint
 
 def endlebordel(cmd, message, parsed_input):
     match cmd:
+        case "spotify":
+            return "MrDestructoid  BipBoup le ti chouxe voici la liste spotify " \
+                   "https://open.spotify.com/playlist/4vbADzemxKl7b6kL8CClEd?si=9d019cd09d3c4f17" \
+                   " j'espere que tu jouiras bien de cet douce playliste envoutante et constructivo constructive " \
+                   "BipBoup" \
+                   " MrDestructoid "
+
         case "bonjour":
+
             liste_msg = [
                 f'Bonjour {message.author.name} ? comment vas tu en cet journée, moi je vais bien il faut beau chaud '
                 f'tres chaud même personnellement je me prélasse devant pimouki en m\'enfournant des beignets a la '

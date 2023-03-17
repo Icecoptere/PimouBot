@@ -2,7 +2,6 @@ import os
 import asyncio
 import spotipy
 import threading
-
 from uuid                import UUID
 from time                import sleep
 from twitchAPI.helper    import first
@@ -18,8 +17,8 @@ from dotenv              import load_dotenv
 from Extension.bordel    import endlebordel
 from PimouIA.chatbot     import get_response
 from twitchAPI.oauth     import UserAuthenticator
-from Spotify.Spotify          import add_track_to_playlist
-from spotipy.oauth2   import SpotifyClientCredentials
+from Spotify.Spotify     import add_track_to_playlist
+from spotipy.oauth2      import SpotifyClientCredentials
 
 load_dotenv()
 nb_message = 0
@@ -112,8 +111,6 @@ async def callback_redeem(uuid: UUID, data: dict) -> None:
     match redeem_ID:
         # Pimou <3
         case "6ccd6826-ebbf-4813-8076-0370c0115d88":
-        # Ice
-        # case "81751725-973f-46c6-b1a3-f70166de7bac":
             user_input = data["data"]["redemption"]["user_input"]
             track_name = user_input
             track_results = bot.spotify.search(q=track_name, limit=10, type='track')

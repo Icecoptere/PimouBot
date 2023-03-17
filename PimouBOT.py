@@ -3,21 +3,21 @@ import asyncio
 import spotipy
 import threading
 
-from uuid             import UUID
-from time             import sleep
-from twitchAPI.helper import first
-from twitchAPI.pubsub import PubSub
-from twitchAPI.twitch import Twitch
-from twitchio.ext     import commands
-from unidecode        import unidecode
-from twitchAPI.types  import AuthScope
-from Blague.BlagueAPI import blague_api
-from Extension.Pokemon import getpokemon
+from uuid                import UUID
+from time                import sleep
+from twitchAPI.helper    import first
+from twitchAPI.pubsub    import PubSub
+from twitchAPI.twitch    import Twitch
+from twitchio.ext        import commands
+from unidecode           import unidecode
+from twitchAPI.types     import AuthScope
+from Blague.BlagueAPI    import blague_api
+from Extension.Pokemon   import getpokemon
 from Minijeux.JusteMouki import just_price
-from dotenv           import load_dotenv
-from Extension.bordel import endlebordel
-from PimouIA.chatbot  import get_response
-from twitchAPI.oauth  import UserAuthenticator
+from dotenv              import load_dotenv
+from Extension.bordel    import endlebordel
+from PimouIA.chatbot     import get_response
+from twitchAPI.oauth     import UserAuthenticator
 from Spotify.Spotify          import add_track_to_playlist
 from spotipy.oauth2   import SpotifyClientCredentials
 

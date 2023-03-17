@@ -23,7 +23,7 @@ from spotipy.oauth2      import SpotifyClientCredentials
 load_dotenv()
 nb_message = 0
 
-
+#Starter_BOT
 class Bot(commands.Bot):
     def __init__(self):
 
@@ -33,12 +33,12 @@ class Bot(commands.Bot):
         self.spotify = spotipy.Spotify(auth_manager=self.auth_manager)
         self.loop = asyncio.get_event_loop()
         threading.Thread(target=self.refresh_spotify_token, daemon=True).start()
-
+#Spotify_Spotify:
     def refresh_spotify_token(self):
         while True:
             sleep(3600)  # Attendre une heure avant de rafraîchir le token
             self.auth_manager.get_access_token()  # Rafraîchir le token Spotify
-
+#Blague_BlagueAPI:
     def do_thing(self):
         while True:
             list_message = blague_api()
@@ -46,7 +46,7 @@ class Bot(commands.Bot):
             sleep(3)
             self.loop.create_task(self.chan.send(list_message[1]))
             sleep(6000)
-
+#Botlaunch:
     async def event_ready(self):
         self.loop = asyncio.get_event_loop()
         self.chan = self.get_channel(os.getenv("CHANNEL"))
@@ -60,25 +60,19 @@ class Bot(commands.Bot):
         nb_message = nb_message + 1
         if message.echo:
             return
+#Pour voir le tchat:
         print(f"{message.author.name}:{message.content}")
         if message.content[0] == "!":
             parsed_input = unidecode(message.content.lstrip("!")).split(" ")
             command = parsed_input[0].lower()
+#Extension_pokemon:
             match command:
                 case "pokemon":
                     pokemon = parsed_input[1].lower()
                     response = getpokemon(pokemon)
                     await message.channel.send(response)
                     return
-                case "karaoke":
-                    await message.channel.send("Voila le lien pour choisir le karaoké de ton choix "
-                                               "youtube.com/@karafunfr")
-                    return
-                case "bigard":
-                    await message.channel.send("SingsNote BIGARD BIGARD ! LA STAR DU STEAK HACHÉ SingsMic "
-                                               "youtu.be/VALBLhsaXPE")
-                    return
-
+#Extension_bordel:
             response = endlebordel(command, message, parsed_input)
             if response is not None:
                 await message.channel.send(response)
@@ -97,13 +91,14 @@ class Bot(commands.Bot):
     async def event_channel_points_custom_reward_add(payload):
         print(f"Custom reward added: {payload}")
 
+#ID twitch:
 
 CLIENT_ID = os.getenv("CLIENT_ID")
 TWITCH_SECRET = os.getenv("TWITCH_SECRET")
 USER_SCOPE = [AuthScope.CHANNEL_READ_REDEMPTIONS]
 TARGET_CHANNEL = os.getenv("CHANNEL")
 
-
+#Point Twitch(Spotify):
 async def callback_redeem(uuid: UUID, data: dict) -> None:
     # print(data)
 
@@ -128,7 +123,7 @@ async def callback_redeem(uuid: UUID, data: dict) -> None:
                 await bot.chan.send(f"Je n'ai pas trouvé {track_name} sur Spotify.")
             return
 
-
+#initialisation point twitch:
 async def run_example():
     twitch = await Twitch(CLIENT_ID, TWITCH_SECRET)
     auth = UserAuthenticator(twitch, [AuthScope.CHANNEL_READ_REDEMPTIONS], force_verify=False)

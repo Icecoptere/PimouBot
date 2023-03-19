@@ -41,6 +41,11 @@ playlist_id = os.getenv("SPOTIFY_PLAYLIST_ID")
 os.chdir('../../PimouBot')
 
 
+def skip_track_playlist():
+    sp.next_track()
+
+
+
 # define a function to add a track to the playlist
 def add_track_to_playlist(track_uri):
     try:

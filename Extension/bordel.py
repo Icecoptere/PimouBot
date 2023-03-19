@@ -24,6 +24,9 @@ def endlebordel(cmd, message, parsed_input):
         case "bigard":
             return "SingsNote BIGARD BIGARD ! LA STAR DU STEAK HACHÉ SingsMic ""youtu.be/VALBLhsaXPE"
 
+        case "github":
+            return "Voici mon github :""https://github.com/Pimouki"
+
         case "bonjour":
             liste_msg = [
                 f'Bonjour {message.author.name} ? comment vas tu en cet journée, moi je vais bien il faut beau chaud '

@@ -4,6 +4,7 @@ import spotipy
 import threading
 from uuid import UUID
 from time import sleep
+from playsound import playsound
 from twitchAPI.helper import first
 from twitchAPI.pubsub import PubSub
 from twitchAPI.twitch import Twitch
@@ -17,7 +18,7 @@ from dotenv import load_dotenv
 from Extension.bordel import endlebordel
 from PimouIA.chatbot import get_response
 from twitchAPI.oauth import UserAuthenticator
-from Spotify.Spotify import add_track_to_playlist
+from Spotify.Spotify import add_track_to_playlist, skip_track_playlist
 from spotipy.oauth2 import SpotifyClientCredentials
 
 load_dotenv()
@@ -35,7 +36,7 @@ class Bot(commands.Bot):
         self.loop = asyncio.get_event_loop()
         threading.Thread(target=self.refresh_spotify_token, daemon=True).start()
 
-    # Spotify_Spotify:
+# Spotify_Spotify:
     def refresh_spotify_token(self):
         while True:
             sleep(3600)  # Attendre une heure avant de rafraîchir le token
@@ -59,17 +60,21 @@ class Bot(commands.Bot):
         print(f'User id is | {self.user_id}')
         print(f"Bot connected to Twitch as {bot.nick}")
 
+    # Gere les message envoyé:
+
     async def event_message(self, message):
         global nb_message
         nb_message = nb_message + 1
         if message.echo:
             return
         # Pour voir le tchat:
+
         print(f"{message.author.name}:{message.content}")
         if message.content[0] == "!":
             parsed_input = unidecode(message.content.lstrip("!")).split(" ")
             command = parsed_input[0].lower()
             # Extension_pokemon:
+
             match command:
                 case "pokemon":
                     pokemon = parsed_input[1].lower()
@@ -77,10 +82,18 @@ class Bot(commands.Bot):
                     await message.channel.send(response)
                     return
             # Extension_bordel:
+
             response = endlebordel(command, message, parsed_input)
             if response is not None:
                 await message.channel.send(response)
                 return
+        # Dialogue AI:
+
+        elif "pimoushka" in message.content.lower():
+            pseudo = message.author.name
+            response_aiml = get_response(message.content)
+            await message.channel.send(pseudo+" "+response_aiml)
+            return
 
         parsed_input = unidecode(message.content.lstrip("")).split(" ")
         command = parsed_input[0].lower()
@@ -88,9 +101,6 @@ class Bot(commands.Bot):
         if response is not None:
             await message.channel.send(response)
             return
-        if nb_message % 15 == 0:
-            response_aiml = get_response(message.content)
-            await message.channel.send(response_aiml)
 
     async def event_channel_points_custom_reward_add(payload):
         print(f"Custom reward added: {payload}")
@@ -105,12 +115,27 @@ TARGET_CHANNEL = os.getenv("CHANNEL")
 
 
 # Point Twitch(Spotify):
+
 async def callback_redeem(uuid: UUID, data: dict) -> None:
-    # print(data)
+    print(data)
 
     redeem_ID = data["data"]["redemption"]["reward"]["id"]
     match redeem_ID:
-        # Pimou <3
+        # alerte coucou:
+
+        case "68497a1b-283b-47c9-be07-25abf4624c9e":
+            playsound('C:\\Users\\Pimouki\\PycharmProjects\\PimouBOT\\Ressource\\coucou.mp3')
+        # alerte ROUE:
+
+        case "d1bc0a5c-350f-4d56-aebb-ea6066ad306a":
+            playsound('C:\\Users\\Pimouki\\PycharmProjects\\PimouBOT\\Ressource\\uwu.mp3')
+        # skip music:
+
+        case "778a5a3a-1003-4036-90a1-3e8ad42febb4":
+            skip_track_playlist()
+
+        # Pimou <3:
+
         case "6ccd6826-ebbf-4813-8076-0370c0115d88":
             user_input = data["data"]["redemption"]["user_input"]
             track_name = user_input
@@ -131,6 +156,7 @@ async def callback_redeem(uuid: UUID, data: dict) -> None:
 
 
 # initialisation point twitch:
+
 async def run_example():
     twitch = await Twitch(CLIENT_ID, TWITCH_SECRET)
     auth = UserAuthenticator(twitch, [AuthScope.CHANNEL_READ_REDEMPTIONS], force_verify=False)

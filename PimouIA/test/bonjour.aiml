@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="1.0">
+    <category>
+        <pattern>BONJOUR</pattern>
+        <template>Bonjour, comment vas tu ?</template>
+    </category>
+    <category>
+        <pattern>JE M APPEL *</pattern>
+        <template>Bonjour <set name="prenom"><star></star></set></template>
+    </category>
+    <category>
+        <pattern>COMMENT JE M APPEL</pattern>
+        <template>Tu t'appel <get name="prenom"></get> </template>
+    </category>
+</aiml>

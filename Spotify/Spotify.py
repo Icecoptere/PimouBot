@@ -1,14 +1,10 @@
 import os
-import sys
-import json
 import spotipy
-import spotipy.util as util
-from json.decoder import JSONDecodeError
 from dotenv import load_dotenv
 from spotipy import oauth2
 
 load_dotenv()
-os.chdir('./Spotify')
+#os.chdir('./Spotify')
 # configure the Spotify API
 scope = 'playlist-read-private user-modify-playback-state playlist-modify-private user-read-playback-state ' \
         'user-read-currently-playing playlist-modify-public playlist-modify-private'

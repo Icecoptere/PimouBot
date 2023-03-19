@@ -2,6 +2,7 @@ import os
 import asyncio
 import spotipy
 import threading
+
 from uuid import UUID
 from time import sleep
 from playsound import playsound
@@ -15,6 +16,7 @@ from Blague.BlagueAPI import blague_api
 from Extension.Pokemon import getpokemon
 from Minijeux.JusteMouki import just_price
 from dotenv import load_dotenv
+from autocorrect import Speller
 from Extension.bordel import endlebordel
 from PimouIA.chatbot import get_response
 from twitchAPI.oauth import UserAuthenticator
@@ -22,10 +24,9 @@ from Spotify.Spotify import add_track_to_playlist, skip_track_playlist
 from spotipy.oauth2 import SpotifyClientCredentials
 
 load_dotenv()
-nb_message = 0
 
 
-# Starter_BOT
+# Starter_BOT:
 class Bot(commands.Bot):
     def __init__(self):
 
@@ -35,8 +36,10 @@ class Bot(commands.Bot):
         self.spotify = spotipy.Spotify(auth_manager=self.auth_manager)
         self.loop = asyncio.get_event_loop()
         threading.Thread(target=self.refresh_spotify_token, daemon=True).start()
+        self.spell = Speller(lang="fr")
+        self.nb_message = 0
 
-# Spotify_Spotify:
+    # Spotify_Spotify:
     def refresh_spotify_token(self):
         while True:
             sleep(3600)  # Attendre une heure avant de rafraîchir le token
@@ -51,7 +54,8 @@ class Bot(commands.Bot):
             self.loop.create_task(self.chan.send(list_message[1]))
             sleep(6000)
 
-    # Botlaunch:
+# Botlaunch:
+
     async def event_ready(self):
         self.loop = asyncio.get_event_loop()
         self.chan = self.get_channel(os.getenv("CHANNEL"))
@@ -63,16 +67,17 @@ class Bot(commands.Bot):
     # Gere les message envoyé:
 
     async def event_message(self, message):
-        global nb_message
-        nb_message = nb_message + 1
+        self.sentence = message.content.lower()
+        self.nb_message = self.nb_message + 1
         if message.echo:
             return
+
         # Pour voir le tchat:
 
-        print(f"{message.author.name}:{message.content}")
-        if message.content[0] == "!":
-            parsed_input = unidecode(message.content.lstrip("!")).split(" ")
+        if self.sentence[0] == "!":
+            parsed_input = unidecode(self.sentence.lstrip("!")).split(" ")
             command = parsed_input[0].lower()
+
             # Extension_pokemon:
 
             match command:
@@ -87,15 +92,20 @@ class Bot(commands.Bot):
             if response is not None:
                 await message.channel.send(response)
                 return
-        # Dialogue AI:
 
-        elif "pimoushka" in message.content.lower():
+        # Dialogue AI:
+        # + correction:
+
+        elif "pimoushka" in self.sentence:
             pseudo = message.author.name
-            response_aiml = get_response(message.content)
-            await message.channel.send(pseudo+" "+response_aiml)
+            query = self.sentence.split("pimoushka")
+            query = [self.spell(w) for w in (query[1].split())]
+            spelled = " ".join(query)
+            response_aiml = get_response(spelled, pseudo)
+            await message.channel.send(pseudo + " " + response_aiml)
             return
 
-        parsed_input = unidecode(message.content.lstrip("")).split(" ")
+        parsed_input = unidecode(self.sentence.lstrip("")).split(" ")
         command = parsed_input[0].lower()
         response = just_price(command, message)
         if response is not None:

@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <aiml version="1.0">
 
-<!--  Free software Copyright © ALICE A.I. Foundation, Inc. --> 
-<!--  This program is open source code released under --> 
-<!--  the terms of the GNU General Public License     --> 
-<!--  as published by the Free Software Foundation.   --> 
-<!--  Complies with AIML 1.01 Tag Set Specification --> 
-<!--  as adopted by the ALICE A.I. Foundation.  --> 
-<!--  Auteur : Jean Louis Campion (jlc@Multivers.net) d'après les travaux du Dr Richard Wallace - langue : française -->
-<!--  Revision atomique_ed.aiml    version 1.00  --> 
-<!--  Modified by Tan Siew Lan (tsiewlan@excite.com),Singapore on 08 Dec 2005 --> 
-
-
 <category><pattern>* A PLU * RENCONTRER</pattern><template>ce fut agréable pour moi aussi, <get name="name"/>. </template></category>
 <category><pattern>* NON</pattern><that>PLUS TARD ALORS</that><template><srai>au revoir</srai></template></category>
 <category><pattern>* TU VEUX</pattern><that>QUE PEUT ON FAIRE ALORS</that><template>Pour le moment je ne sais que discuter? </template></category>
